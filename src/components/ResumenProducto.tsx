@@ -32,7 +32,7 @@ export default function ResumenProducto({producto}: {producto: ProductoProps}): 
               Precio: {formatearDinero(precio)}
             </p>
             <p className="text-lg text-gray-700">
-              Subtotal: {formatearDinero(precio * cantidad)}
+              Subtotal: {formatearDinero(precio * (cantidad ?? 0))}
             </p>
           </div>
     

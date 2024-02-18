@@ -14,7 +14,7 @@ export default function Resumen(): JSX.Element {
     const comprobarPedido = () => pedido.length === 0;
 
     useEffect(()=> {
-        const nuevoTotal = pedido.reduce((total, producto) => (producto.precio * producto.cantidad) + total, 0);
+        const nuevoTotal = pedido.reduce((total, producto) => (producto.precio * (producto.cantidad ?? 0)) + total, 0);
         dispatch(setTotal(nuevoTotal));
     }, [pedido]);
 

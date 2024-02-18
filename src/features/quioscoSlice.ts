@@ -1,11 +1,12 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { categorias } from "../data/categorias";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { obtenerCategorias } from "./quioscoAPI";
 import { RootState } from "../types/types";
 import { CategoriaProps } from "../types/types";
 import { ProductoProps } from "../types/types";
 
 const initialState = {
-  categorias: categorias,
+  status: "idle",
+  categorias: [],
   categoriaActual: {},
   modal: false,
   producto: {},
@@ -13,13 +14,19 @@ const initialState = {
   total: 0,
 };
 
+export const getCategoriesAsync = createAsyncThunk(
+  'quiosco/getCategories', 
+  async () => {
+    const response = await obtenerCategorias();
+    console.log(response.data);
+    return response.data;
+  }
+);
+
 export const quioscoSlice = createSlice({
   name: "quiosco",
   initialState,
   reducers: {
-    setCategorias: (state, action) => {
-      state.categorias = action.payload;
-    },
     setCategoriaActual: (state, action) => {
       state.categoriaActual = action.payload;
     },
@@ -36,10 +43,19 @@ export const quioscoSlice = createSlice({
       state.total = action.payload;
     },
   },
+  extraReducers: (builder) => {
+    builder
+    .addCase(getCategoriesAsync.pending, (state, action) => {
+      state.status = 'loading';
+    })
+    .addCase(getCategoriesAsync.fulfilled, (state, action) => {
+      state.status = 'idle';
+      state.categorias = action.payload;
+    })
+  }
 });
 
 export const {
-  setCategorias,
   setCategoriaActual,
   setModal,
   setProducto,

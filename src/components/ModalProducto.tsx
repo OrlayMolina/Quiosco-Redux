@@ -19,8 +19,10 @@ export default function ModalProducto(): JSX.Element  {
         if(pedido.some(pedidoState => pedidoState.id === producto.id)){
             const productoEdicion = pedido.filter( pedidoState => pedidoState.id === producto.id)[0];
 
-            setCantidad(productoEdicion.cantidad);
-            setEdicion(true);
+            if (productoEdicion && productoEdicion.cantidad) {
+                setCantidad(productoEdicion.cantidad);
+                setEdicion(true);
+            }
         }
     }, [pedido]);
 

@@ -26,6 +26,7 @@ export interface CustomProps {
 
 export type RootState = {
     quiosco: {
+        status: "idle" | "loading" | "failed",
         categorias: CategoriaProps[];
         categoriaActual: CategoriaProps;
         modal: boolean;

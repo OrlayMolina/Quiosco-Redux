@@ -1,7 +1,8 @@
+import { useEffect } from "react";
 import Categoria from "./Categoria";
 import { CategoriaProps } from "../types/types";
 import { useDispatch, useSelector } from 'react-redux';
-import { setCategoriaActual, selectCategorias } from '../features/quioscoSlice';
+import { setCategoriaActual, selectCategorias, getCategoriesAsync } from '../features/quioscoSlice';
 
 export default function Sidebar(): JSX.Element {
 
@@ -11,6 +12,10 @@ export default function Sidebar(): JSX.Element {
     const handleClickCategoria = (categoria: CategoriaProps) => {
         dispatch(setCategoriaActual(categoria));
     }
+    
+    useEffect(() => {
+        dispatch(getCategoriesAsync());
+    }, [dispatch]);
 
     return (
         <aside className="md:w-72">
@@ -27,7 +32,7 @@ export default function Sidebar(): JSX.Element {
                     <Categoria
                         key={categoria.id}
                         categoria={categoria} 
-                        onClickCategoria={handleClickCategoria}
+                        onClickCategoria={() => handleClickCategoria(categoria)}
                     
                     />
                 ))}

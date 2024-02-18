@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 
 interface CategoriasProps {
     categoria: CategoriaProps;
-    onClickCategoria: (categoria: CategoriaProps) => void;
+    onClickCategoria: () => void;
 }
 
 export default function Categoria({ categoria, onClickCategoria }: CategoriasProps): JSX.Element  {
@@ -24,7 +24,7 @@ export default function Categoria({ categoria, onClickCategoria }: CategoriasPro
             <button 
                 className="text-lg font-bold cursor-pointer truncate"
                 type="button"
-                onClick={() => onClickCategoria(categoria)}
+                onClick={() => onClickCategoria()}
             >
                 {nombre}
             </button>
