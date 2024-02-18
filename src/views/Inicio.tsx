@@ -1,4 +1,4 @@
-import { productos as data } from '../data/productos'
+import { productos as data } from '../data/productos';
 import { ProductoProps } from '../types/types';
 import { useSelector } from 'react-redux';
 import Producto from '../components/Producto';
