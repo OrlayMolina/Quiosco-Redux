@@ -2,6 +2,7 @@ import { createRef, RefObject, useState } from "react";
 import { Link } from "react-router-dom";
 import clienteAxios from "../config/axios";
 import Alerta from "../components/Alerta";
+import MensajeConfirmacion from "../components/MensajeConfirmacion";
 
 export default function Registro(): JSX.Element  {
     
@@ -11,6 +12,7 @@ export default function Registro(): JSX.Element  {
     const passwordConfirmationRef: RefObject<HTMLInputElement> = createRef();
 
     const [errores, setErrores] = useState<string[]>([]);
+    const [exito, setExito] = useState(false);
 
     const handleSubmit = async (e: { preventDefault: () => void; }) => {
         e.preventDefault();
@@ -22,9 +24,14 @@ export default function Registro(): JSX.Element  {
             password_confirmation: passwordConfirmationRef?.current?.value
         }
         try {
-            const response = await clienteAxios.post('/api/registro', datos);
+            const {data} = await clienteAxios.post('/api/registro', datos);
 
-            console.log(response);
+            console.log(data.token);
+
+            setExito(true);
+            setTimeout(() => {
+                setExito(false);
+            }, 3000);
         } catch (error: any) {
             setErrores(Object.values(error.response.data.errors));
         }
@@ -40,7 +47,11 @@ export default function Registro(): JSX.Element  {
                     onSubmit={handleSubmit}
                     noValidate
                 >
-                    {errores ? errores.map((error, i )=> <Alerta key={i}>{error}</Alerta>): null}
+                    {errores ? errores.map((error, i )=> <Alerta key={i}>{error}</Alerta>): <div className='text-center my-2 bg-green-600 text-white font-bold p-3 uppercase'>Usuario creado correctamente</div>}
+
+                    {exito && (
+                        <MensajeConfirmacion>Usuario creado correctamente</MensajeConfirmacion>
+                    )}
                 <div className="mb-4">
                     <label htmlFor="name" className="text-slate-800">
                     Nombre:
