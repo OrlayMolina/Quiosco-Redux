@@ -19,7 +19,7 @@ export const getCategoriesAsync = createAsyncThunk<CategoriaProps[]>(
   'quiosco/getCategories', 
   async () => {
     const response = await obtenerCategorias();
-    console.log(response.data);
+    //console.log(response.data);
     return response.data;
   }
 );
@@ -28,7 +28,7 @@ export const getProductsAsync = createAsyncThunk(
   'quiosco/getProducts', 
   async () => {
     const response = await obtenerProductos();
-    console.log(response.data);
+    //console.log(response.data);
     return response.data;
   }
 );
