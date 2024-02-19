@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { obtenerCategorias } from "./quioscoAPI";
+import { obtenerCategorias, obtenerProductos } from "./quioscoAPI";
 import { RootState } from "../types/types";
 import { CategoriaProps } from "../types/types";
 import { ProductoProps } from "../types/types";
@@ -10,14 +10,24 @@ const initialState = {
   categoriaActual: {},
   modal: false,
   producto: {},
+  productoArray: [],
   pedido: [],
   total: 0,
 };
 
-export const getCategoriesAsync = createAsyncThunk(
+export const getCategoriesAsync = createAsyncThunk<CategoriaProps[]>(
   'quiosco/getCategories', 
   async () => {
     const response = await obtenerCategorias();
+    console.log(response.data);
+    return response.data;
+  }
+);
+
+export const getProductsAsync = createAsyncThunk(
+  'quiosco/getProducts', 
+  async () => {
+    const response = await obtenerProductos();
     console.log(response.data);
     return response.data;
   }
@@ -45,13 +55,27 @@ export const quioscoSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-    .addCase(getCategoriesAsync.pending, (state, action) => {
+    .addCase(getCategoriesAsync.pending, (state) => {
       state.status = 'loading';
     })
     .addCase(getCategoriesAsync.fulfilled, (state, action) => {
       state.status = 'idle';
       state.categorias = action.payload;
     })
+    .addCase(getCategoriesAsync.rejected, (state, action) => {
+      state.status = 'idle';
+    })
+    .addCase(getProductsAsync.pending, (state, action) => {
+      state.status = 'loading';
+    })
+    .addCase(getProductsAsync.fulfilled, (state, action) => {
+      state.status = 'idle';
+      state.productoArray = action.payload;
+    })
+    .addCase(getProductsAsync.rejected, (state, action) => {
+      state.status = 'idle';
+    })
+    
   }
 });
 
@@ -67,6 +91,7 @@ export const selectCategorias = (state: RootState): CategoriaProps[] => state.qu
 export const getCategoriaActual = (state: RootState): CategoriaProps => state.quiosco.categoriaActual;
 export const selectModal = (state: RootState): boolean => state.quiosco.modal;
 export const selectProducto = (state: RootState): ProductoProps => state.quiosco.producto;
+export const selectProductoArray = (state: RootState): ProductoProps[] => state.quiosco.productoArray;
 export const selectPedido = (state: RootState): ProductoProps[] => state.quiosco.pedido;
 export const selectTotal = (state: RootState) => state.quiosco.total;
 

@@ -1,17 +1,22 @@
-import { productos as data } from '../data/productos';
+//import { productos as data } from '../data/productos.ts';
+import { useEffect } from 'react';
 import { ProductoProps } from '../types/types';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import Producto from '../components/Producto';
-import { getCategoriaActual } from '../features/quioscoSlice';
+import { getCategoriaActual, selectProductoArray, getProductsAsync } from '../features/quioscoSlice';
 
 export default function Inicio(): JSX.Element {
 
+    const dispatch = useDispatch();
+    const productos = useSelector(selectProductoArray);
     const categoriaActual = useSelector(getCategoriaActual);
     const titulo = categoriaActual.nombre ? categoriaActual.nombre : 'Inicio';
 
-    const productos = categoriaActual.id ? data.filter(producto => producto.categoria_id === categoriaActual.id) : data;
+    //const productos = categoriaActual.id ? data.filter(producto => producto.categoria_id === categoriaActual.id) : data;
+    useEffect( () => {
+        dispatch(getProductsAsync());
+    }, []);
 
-   
     return (
         <>
             <h1 className='text-4xl font-black'>{titulo}</h1>

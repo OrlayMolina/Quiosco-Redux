@@ -1,3 +1,5 @@
+import { AxiosRequestConfig } from "axios";
+
 export interface CategoriaProps {
     id: number;
     icono: string;
@@ -31,7 +33,17 @@ export type RootState = {
         categoriaActual: CategoriaProps;
         modal: boolean;
         producto: ProductoProps;
+        productoArray: ProductoProps[];
         pedido: ProductoProps[];
         total: number;
     };
 };
+
+export interface AxiosResponse<T = never>  {
+    data: T;
+    status: number;
+    statusText: string;
+    headers: Record<string, string>;
+    config: AxiosRequestConfig<T>;
+    request?: unknown;
+}

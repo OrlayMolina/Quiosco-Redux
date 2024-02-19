@@ -1,8 +1,8 @@
-import axios from 'axios';
+import clienteAxios from '../config/axios.ts';
 
 const obtenerCategorias = async () => {
     try {
-        const response = await axios.get(import.meta.env.VITE_API_URL + '/categorias');
+        const response = await clienteAxios('/api/categorias');
         //console.log(response.data);
         return response.data;
     } catch (error) {
@@ -11,6 +11,17 @@ const obtenerCategorias = async () => {
     }
 }
 
+const obtenerProductos = async () => {
+    try {
+        const response = await clienteAxios('/api/productos');
+        return response.data;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+}
+
 export { 
-    obtenerCategorias
+    obtenerCategorias,
+    obtenerProductos
 }
