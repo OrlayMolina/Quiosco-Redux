@@ -1,14 +1,43 @@
+import { createRef, RefObject, useState } from "react";
 import { Link } from "react-router-dom";
+import clienteAxios from "../config/axios";
+import Alerta from "../components/Alerta";
+import MensajeConfirmacion from "../components/MensajeConfirmacion";
 
 export default function Login(): JSX.Element  {
+
+    const emailRef: RefObject<HTMLInputElement> =  createRef();
+    const passwordRef: RefObject<HTMLInputElement> = createRef();
+
+    const [errores, setErrores] = useState<string[]>([]);
+
+    const handleSubmit = async (e: { preventDefault: () => void; }) => {
+        e.preventDefault();
+
+        const datos = {
+            email: emailRef?.current?.value,
+            password: passwordRef?.current?.value,
+        }
+        try {
+            const {data} = await clienteAxios.post('/api/login', datos);
+
+            console.log(data.token);
+        } catch (error: any) {
+            setErrores(Object.values(error.response.data.errors));
+        }
+    }
+
     return (
         <>
             <h1 className="text-4xl font-black">Inicia Sesión</h1>
             <p>Para crear un pedido debes iniciar sesión</p>
 
             <div className="bg-white shadow-lg rounded-md mt-10 px-5 py-10">
-                <form>
-
+                <form 
+                    onSubmit={handleSubmit}
+                    noValidate
+                >
+                    {errores ? errores.map((error, i )=> <Alerta key={i}>{error}</Alerta>): null}
                 <div className="mb-4">
                     <label htmlFor="email" className="text-slate-800">
                     Email:
@@ -19,6 +48,7 @@ export default function Login(): JSX.Element  {
                     className="mt-2 w-full p-3 bg-gray-50"
                     name="email"
                     placeholder="Tu Email"
+                    ref={emailRef}
                     />
                 </div>
 
@@ -32,6 +62,7 @@ export default function Login(): JSX.Element  {
                     className="mt-2 w-full p-3 bg-gray-50"
                     name="password"
                     placeholder="Tu Password"
+                    ref={passwordRef}
                     />
                 </div>
 

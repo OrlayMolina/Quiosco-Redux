@@ -47,7 +47,7 @@ export default function Registro(): JSX.Element  {
                     onSubmit={handleSubmit}
                     noValidate
                 >
-                    {errores ? errores.map((error, i )=> <Alerta key={i}>{error}</Alerta>): <div className='text-center my-2 bg-green-600 text-white font-bold p-3 uppercase'>Usuario creado correctamente</div>}
+                    {errores ? errores.map((error, i )=> <Alerta key={i}>{error}</Alerta>): null}
 
                     {exito && (
                         <MensajeConfirmacion>Usuario creado correctamente</MensajeConfirmacion>
