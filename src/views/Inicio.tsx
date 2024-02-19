@@ -12,7 +12,7 @@ export default function Inicio(): JSX.Element {
     const categoriaActual = useSelector(getCategoriaActual);
     const titulo = categoriaActual.nombre ? categoriaActual.nombre : 'Inicio';
 
-    //const productos = categoriaActual.id ? data.filter(producto => producto.categoria_id === categoriaActual.id) : data;
+    const productosFiltrados = categoriaActual.id ? productos.filter(producto => producto.categoria_id === categoriaActual.id) : productos;
     useEffect( () => {
         dispatch(getProductsAsync());
     }, []);
@@ -23,7 +23,7 @@ export default function Inicio(): JSX.Element {
             <p className='text-2xl my-10'>Elige y personaliza tu pedido a continuación.</p>
 
             <div className='grid gap-4 grid-cols-1 md:grid-cols-2 xl:grid-cols-3'>
-                {productos.map((producto: ProductoProps) => (
+                {productosFiltrados.map((producto: ProductoProps) => (
                     <Producto 
                         key={producto.id}
                         producto={producto}
