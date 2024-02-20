@@ -39,11 +39,14 @@ export type RootState = {
     };
 };
 
-export interface AxiosResponse<T = never>  {
-    data: T;
-    status: number;
-    statusText: string;
-    headers: Record<string, string>;
-    config: AxiosRequestConfig<T>;
-    request?: unknown;
+export interface AuthResponse {
+    token: string;
+}
+
+export interface AuthFunctions {
+    login: (datos: { email: string; password: string; }, setErrores: (errores: string[]) => void) => Promise<void>;
+    registro: (datos: { email: string; password: string; }, setErrores: (errores: string[]) => void, setExito: (exito: boolean) => void) => void;
+    logout: () => void;
+    user: AuthResponse | null;
+    error: unknown;
 }

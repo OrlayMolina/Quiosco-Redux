@@ -8,6 +8,7 @@ import Resumen from "../components/Resumen";
 import ModalProducto from "../components/ModalProducto";
 import { useSelector } from "react-redux";
 import { selectModal } from "../features/quioscoSlice";
+import { useAuth } from "../hooks/useAuth";
 
 const customStyles: CustomProps = {
     content: {
@@ -24,6 +25,7 @@ Modal.setAppElement('#root');
 
 export default function Layout(): JSX.Element  {
 
+    // const {user, error} = useAuth({middleware: 'auth'});
     const modal = useSelector(selectModal);
 
     return (

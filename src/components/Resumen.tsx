@@ -3,7 +3,9 @@ import { useSelector, useDispatch } from "react-redux";
 import { selectPedido } from "../features/quioscoSlice";
 import { formatearDinero } from "../helpers";
 import ResumenProducto from "./ResumenProducto";
-import { setTotal, selectTotal } from "../features/quioscoSlice";
+import { setTotal, selectTotal, setPedido } from "../features/quioscoSlice";
+import clienteAxios from "../config/axios";
+import { toast } from "react-toastify";
 
 export default function Resumen(): JSX.Element {
 
@@ -12,6 +14,35 @@ export default function Resumen(): JSX.Element {
     const total = useSelector(selectTotal);
 
     const comprobarPedido = () => pedido.length === 0;
+
+    const handleSubmit = async (e: { preventDefault: () => void; }) => {
+        e.preventDefault();
+        const token = localStorage.getItem('AUTH_TOKEN');
+        try {
+            const { data } = await clienteAxios.post('/api/pedidos', 
+            {
+                total,
+                productos: pedido.map(producto => {
+                    return {
+                        id: producto.id,
+                        cantidad: producto.cantidad
+                    }
+                })
+            }, 
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+
+            toast.success(data.message);
+            setTimeout( () => {
+                dispatch(setPedido([]));
+            }, 1000);
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     useEffect(()=> {
         const nuevoTotal = pedido.reduce((total, producto) => (producto.precio * (producto.cantidad ?? 0)) + total, 0);
@@ -47,7 +78,10 @@ export default function Resumen(): JSX.Element {
                 {formatearDinero(total)}
             </p>
 
-            <form className="w-full">
+            <form 
+                className="w-full"
+                onSubmit={handleSubmit}
+            >
                 <div className="mt-5">
                     <input 
                         type="submit" 

@@ -1,30 +1,29 @@
 import { createRef, RefObject, useState } from "react";
 import { Link } from "react-router-dom";
-import clienteAxios from "../config/axios";
 import Alerta from "../components/Alerta";
-import MensajeConfirmacion from "../components/MensajeConfirmacion";
+import { useAuth } from "../hooks/useAuth";
 
-export default function Login(): JSX.Element  {
+    export default function Login(): JSX.Element  {
 
     const emailRef: RefObject<HTMLInputElement> =  createRef();
     const passwordRef: RefObject<HTMLInputElement> = createRef();
 
     const [errores, setErrores] = useState<string[]>([]);
+    const { login } = useAuth({
+        middleware: 'guest',
+        url: '/'
+    });
 
     const handleSubmit = async (e: { preventDefault: () => void; }) => {
         e.preventDefault();
 
-        const datos = {
-            email: emailRef?.current?.value,
-            password: passwordRef?.current?.value,
+        const datos: { email: string; password: string; }  = {
+            email: emailRef?.current?.value || '',
+            password: passwordRef?.current?.value || '',
         }
-        try {
-            const {data} = await clienteAxios.post('/api/login', datos);
 
-            console.log(data.token);
-        } catch (error: any) {
-            setErrores(Object.values(error.response.data.errors));
-        }
+        login(datos, setErrores);
+        
     }
 
     return (

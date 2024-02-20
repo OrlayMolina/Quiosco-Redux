@@ -3,7 +3,6 @@ import clienteAxios from '../config/axios.ts';
 const obtenerCategorias = async () => {
     try {
         const response = await clienteAxios('/api/categorias');
-        //console.log(response.data);
         return response.data;
     } catch (error) {
         console.log(error);

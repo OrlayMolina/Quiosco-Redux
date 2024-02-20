@@ -1,6 +1,7 @@
 import Categoria from "./Categoria";
 import { useEffect } from "react";
 import { CategoriaProps } from "../types/types";
+import { useAuth } from "../hooks/useAuth";
 import { useDispatch, useSelector } from 'react-redux';
 import { setCategoriaActual, selectCategorias, getCategoriesAsync } from '../features/quioscoSlice';
 
@@ -8,6 +9,7 @@ export default function Sidebar(): JSX.Element {
 
     const dispatch = useDispatch();
     const categorias: CategoriaProps[] = useSelector(selectCategorias);
+    const {logout, user} = useAuth({middleware: 'auth'})
 
     const handleClickCategoria = (categoria: CategoriaProps) => {
         dispatch(setCategoriaActual(categoria));
@@ -27,8 +29,12 @@ export default function Sidebar(): JSX.Element {
                 />
             </div>
 
+            <p className="my-10 text-xl text-center font-bold">
+                Hola: {user?.name}
+            </p>
+
             <div className="mt-10">
-                {categorias.map((categoria: CategoriaProps) => (
+                {categorias && categorias.map((categoria: CategoriaProps) => (
                     <Categoria
                         key={categoria.id}
                         categoria={categoria} 
@@ -43,6 +49,7 @@ export default function Sidebar(): JSX.Element {
                 <button
                     type="button"
                     className="text-center bg-red-500 w-full p-3 font-bold text-white truncate"
+                    onClick={logout}
                 >
                     Cancelar Orden
                 </button>
