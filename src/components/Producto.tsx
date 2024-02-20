@@ -23,7 +23,7 @@ export default function Producto({producto, botonAgregar = false, botonDisponibl
     const handleClickProductoAgotado = async (id: number) => {
         const token = localStorage.getItem('AUTH_TOKEN');
         try {
-            await clienteAxios.post(`/api/productos/${id}`, {},  
+            await clienteAxios.put(`/api/productos/${id}`, {},  
             {
                 headers: {
                     Authorization: `Bearer ${token}`
