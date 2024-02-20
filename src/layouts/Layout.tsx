@@ -25,7 +25,7 @@ Modal.setAppElement('#root');
 
 export default function Layout(): JSX.Element  {
 
-    // const {user, error} = useAuth({middleware: 'auth'});
+    useAuth({middleware: 'auth'});
     const modal = useSelector(selectModal);
 
     return (

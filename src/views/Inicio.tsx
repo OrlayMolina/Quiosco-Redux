@@ -14,11 +14,15 @@ export default function Inicio(): JSX.Element {
     const categoriaActual = useSelector(getCategoriaActual);
     const titulo = categoriaActual.nombre ? categoriaActual.nombre : 'Inicio';
 
+    const token = localStorage.getItem('AUTH_TOKEN');
     //Consulta SWR
-    const fetcher = () => clienteAxios.get('/api/productos').then(res => res.data);
-    const { data, error } = useSWR('/api/productos', fetcher, {
-        refreshInterval: 1000
-    });
+    const fetcher = () => clienteAxios.get('/api/productos', {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    
+    }).then(res => res.data);
+    const { data, error } = useSWR('/api/productos', fetcher);
 
     useEffect(() => {
         dispatch(getProductsAsync());
@@ -27,7 +31,7 @@ export default function Inicio(): JSX.Element {
     // Filtrar productos según la categoría actual
     const productosFiltrados = categoriaActual.id ? productos.filter(producto => producto.categoria_id === categoriaActual.id) : productos;
 
-    if (!data) return <div className='container px-48 py-48'><Spinner /></div>;
+    if (!data) return <div className="flex py-48 justify-center"><Spinner /></div>;
     if (error) return <p>Ocurrió un error al cargar los productos.</p>;
 
     return (
@@ -40,6 +44,8 @@ export default function Inicio(): JSX.Element {
                     <Producto 
                         key={producto.id}
                         producto={producto}
+                        botonAgregar={true}
+                        botonDisponible={false}
                     />
                 ))}
             </div>

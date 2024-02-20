@@ -4,7 +4,7 @@ import clienteAxios from "../config/axios";
 import useSWR from "swr";
 import { AuthFunctions, AuthResponse } from "../types/types";
 
-type Middleware = 'guest' | 'auth';
+type Middleware = 'guest' | 'auth' |'admin';
 
 type Url = string;
 
@@ -72,6 +72,12 @@ export const useAuth = ({middleware, url} : { middleware: Middleware; url: Url }
     useEffect(() => {
         if(middleware === 'guest' && url && user) {
             navigate(url);
+        }
+        if(middleware === 'guest' && user && user.admin){
+            navigate('/admin');
+        }
+        if(middleware === 'admin' && user && !user.admin){
+            navigate('/');
         }
         if(middleware === 'auth' && error != null){
             navigate('/auth/login');

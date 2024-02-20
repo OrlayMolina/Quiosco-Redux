@@ -7,7 +7,7 @@ export default function AdminSidebar() {
     
     return (
         <aside className="md:w-72 h-screen">
-            <div>
+            <div className="p-4">
                 <img 
                     src="/img/logo.svg" 
                     alt="Imagen logotipo" 
